@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: knowledgehub
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/knowledgehub}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate          # Flyway owns the schema, Hibernate only checks it
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 30MB
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.0
+      embedding:
+        options:
+          model: text-embedding-3-small
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 1536          # must match the embedding model
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
+
+docmind:
+  storage:
+    dir: ${STORAGE_DIR:./uploads}
+  jwt:
+    secret: ${JWT_SECRET:dev-only-secret-change-me-please-32chars!!}
+    expiry-hours: 24
+  cors:
+    allowed-origins: http://localhost:5173
+  rag:
+    top-k: 5
+    similarity-threshold: 0.3     # raise for stricter matches, lower if answers say "not found" too often
