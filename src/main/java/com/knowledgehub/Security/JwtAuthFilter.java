@@ -1,4 +1,4 @@
-package com.knowledgehub.security;
+package com.knowledgehub.Security;
 
 
 import io.jsonwebtoken.JwtException;
